@@ -24,7 +24,6 @@ class Main_page(Page):
         :return: Произошел ли удачный переход
         """
         text = self.personal_info_steps.click_all_settings()
-        print(text)
         if (text == "Контакты и адреса"):
             return True
         return False
@@ -34,3 +33,32 @@ class Main_page(Page):
 
     def get_name_surname_from_card(self) -> (str, str):
         return self.personal_info_steps.get_name_surname_from_card()
+
+    def click_add_reserve_email(self) -> bool:
+        """
+        :return: Произошел ли удачный переход
+        """
+        text = self.personal_info_steps.click_add_reserve_email()
+        if (text == "Добавление резервной почты"):
+            return True
+        return False
+
+    def add_email(self, email) -> str:
+        """
+        :return: Значение хедера
+        """
+        self.personal_info_steps.clear_email()
+        self.personal_info_steps.insert_reserve_email(email)
+        self.personal_info_steps.click_confirm_email()
+        try:
+            return self.personal_info_steps.check_input_email_result()
+        except Exception:
+            return self.personal_info_steps.get_correct_email_header()
+
+    def check_correct_email_header(self):
+        return self.personal_info_steps.get_correct_email_header()
+
+    def clear_reserve_email(self):
+        self.open("https://id.mail.ru/contacts")
+        self.personal_info_steps.click_delete_reserve_email_btn()
+        self.personal_info_steps.click_confirm_button()

@@ -10,10 +10,10 @@ class BaseSteps(object):
         self.driver = driver
 
     def wait_until_and_get_elem_by_xpath(self, elem) -> WebElement:
-        return WebDriverWait(self.driver, 30, 0.1).until(EC.visibility_of_element_located((By.XPATH, elem)))
+        return WebDriverWait(self.driver, 4, 0.1).until(EC.visibility_of_element_located((By.XPATH, elem)))
 
     def wait_until_and_get_elem_by_css(self, elem) -> WebElement:
-        return WebDriverWait(self.driver, 30, 0.1).until(EC.visibility_of_element_located((By.CSS_SELECTOR, elem)))
+        return WebDriverWait(self.driver, 4, 0.1).until(EC.visibility_of_element_located((By.CSS_SELECTOR, elem)))
 
     def wait_for_url(self, url):
-        return WebDriverWait(self.driver, 30, 0.1).until(EC.url_to_be(url))
+        return WebDriverWait(self.driver, 4, 0.1).until(EC.url_to_be(url))
