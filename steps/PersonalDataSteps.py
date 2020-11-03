@@ -1,7 +1,8 @@
 import time
 
-from .BaseSteps import *
 import pyautogui
+
+from .BaseSteps import *
 
 
 class InputAnnotationsErrors:
@@ -24,13 +25,32 @@ class PersonalDataSteps(BaseSteps):
     last_name_err_path = '//*[@id="root"]/div/div[3]/div/div/div/form/div/div[2]/div[2]/div/div[3]/small'
     nickname_err_path = '//*[@id="root"]/div/div[3]/div/div/div/form/div/div[2]/div[3]/div/div[3]/small'
     city_err_path = '//*[@id="root"]/div/div[3]/div/div/div/form/div/div[2]/div[6]/div[3]/small'
+    submit_change_avatar_paht = '/html/body/div[2]/div[2]/div/div[2]/div/button[1]'
+    upload_process = '//*[@id="root"]/div/div[3]/div/div/div/form/div/div[1]/div/div/div[1]/div[2]/div[1]'
+    photo_ready = '//*[@id="root"]/div/div[3]/div/div/div/form/div/div[1]/div/div/div[1]/div[2]'
+
+    def upload_avatar(self, path: str):
+        time.sleep(2)
+        splited = path.split('/')
+        last_el = len(splited) - 1
+        file_name = splited[last_el]
+        directory_path = '/'.join(splited[0:last_el])
+
+        pyautogui.write('/')
+        time.sleep(2)
+
+        pyautogui.write(directory_path[1:] + '/', interval=0.15)
+        pyautogui.press('return')
+        time.sleep(2)
+
+        pyautogui.write(file_name, interval=0.15)
+        pyautogui.press('return')
+
+    def click_submit_avatar_btn(self):
+        self.wait_until_and_get_elem_by_xpath(self.submit_change_avatar_paht).click()
 
     def click_on_change_button(self):
         self.wait_until_and_get_elem_by_xpath(self.change_btn_path).click()
-
-    def upload_avatar(self, path):
-        pyautogui.write(path, interval=0.25)
-        pyautogui.press('return')
 
     def click_on_avtar(self):
         self.wait_until_and_get_elem_by_xpath(self.avatar_path).click()
@@ -51,17 +71,26 @@ class PersonalDataSteps(BaseSteps):
         """
         :return: Возвращает структуру с ошибками в процессе заполнения формы
         """
-        name_err = self.get_element_text(self.name_path)
+        name_err = self.get_element_text(self.name_err_path)
         last_name_err = self.get_element_text(self.last_name_err_path)
         nickname_err = self.get_element_text(self.nickname_err_path)
         city_err = self.get_element_text(self.city_err_path)
         return InputAnnotationsErrors(name_err, last_name_err, nickname_err, city_err)
 
     def click_submit(self) -> InputAnnotationsErrors:
-        btn = self.wait(self.submit_btn_path)
+        btn = self.wait_until_and_get_elem_by_xpath(self.submit_btn_path)
         btn.click()
-        btn.send_keys('enter')
-        btn.send_keys('return')
-        btn.submit()
-        time.sleep(5)
         return self.collect_errors()
+
+    def check_if_uploaded(self):
+        try:
+            self.wait_until_and_get_elem_by_xpath(self.upload_process)
+            print("ok")
+        except TimeoutError:
+            return False
+        try:
+            self.wait_until_and_get_elem_by_xpath(self.photo_ready)
+            print("ok")
+            return True
+        except TimeoutError:
+            return False

@@ -7,6 +7,7 @@ from selenium.webdriver import DesiredCapabilities, Remote
 from pages.AuthPage import AuthPage
 from pages.IdPage import Main_page
 from pages.PersonalDataPage import Data_page
+from steps.PersonalDataSteps import InputAnnotationsErrors
 
 
 class GetTest(unittest.TestCase):
@@ -17,13 +18,18 @@ class GetTest(unittest.TestCase):
         :return:
         """
         # Страница личных данных
-        self.data_page.open(self.data_page.BASE_URL)
+        self.test_upload_avatar()
+        print("Done 1")
+        self.test_all_ok_data()
+        print("Done 2")
         self.test_fill_form_with_empty_name()
+        print("Done 3")
         self.test_fill_form_with_empty_city()
-
-        # self.test_upload_avatar_by_btn()
-        # self.test_upload_avatar_by_avatar()
-
+        print("Done 4")
+        self.test_fill_with_empty_nickanme()
+        print("Done 5")
+        self.test_fill_with_wrong_city()
+        print("Done main personal data tests")
         # Главная страница
         self.test_change_personal_info()
         print("Done 1")
@@ -36,12 +42,11 @@ class GetTest(unittest.TestCase):
         print("Done main page tests")
         # Pop Up
         self.test_check_empty_email()
-        print("Done 5")
+        print("Done 1")
         self.test_check_incorrect_email()
-        print("Done 6")
+        print("Done 2")
         self.test_check_correct_email()
-        print("Done 7")
-
+        print("Done 3")
         self.clear_email_after_tests()
         print("Done Pop Up tests")
 
@@ -72,6 +77,7 @@ class GetTest(unittest.TestCase):
         self.driver.quit()
 
     def test_change_personal_info(self):
+        self.go_to_main()
         ok = self.main_page.click_change_personal_info()
         self.assertTrue(ok)
         self.go_to_main()
@@ -100,15 +106,15 @@ class GetTest(unittest.TestCase):
         header = self.main_page.add_email("correct@yandex.ru")
         self.assertEqual(header, "Резервная почта добавлена")
 
-    def test_upload_avatar_by_btn(self):
-        test_path = os.path.abspath("../avatar.jpg")
-        self.data_page.change_avatar_by_button(test_path)
-
-    def test_upload_avatar_by_avatar(self):
-        test_path = os.path.abspath("../avatar.jpg")
-        self.data_page.change_avatar_by_avatar(test_path)
+    def test_upload_avatar(self):
+        self.data_page.open(self.data_page.BASE_URL)
+        test_path = os.path.abspath("./avatar.jpg")
+        self.assertTrue(self.data_page.change_avatar(test_path))
+        self.data_page.open(self.data_page.BASE_URL)
+        self.assertTrue(self.data_page.change_avatar_by_avatar(test_path))
 
     def test_fill_form_with_empty_city(self):
+        self.data_page.open(self.data_page.BASE_URL)
         errors = self.data_page.fill_form("Имя", "Фамилия", "Никнейм", "")
         self.assertEqual(errors.city_err, "Укажите город")
         self.assertEqual(errors.name_err, "")
@@ -116,6 +122,7 @@ class GetTest(unittest.TestCase):
         self.assertEqual(errors.nickname_err, "")
 
     def test_fill_form_with_empty_name(self):
+        self.data_page.open(self.data_page.BASE_URL)
         errors = self.data_page.fill_form("", "Фамилия", "Никнейм", "Москва, Россия")
         self.assertEqual(errors.city_err, "")
         self.assertEqual(errors.name_err, "Укажите имя")
@@ -123,8 +130,31 @@ class GetTest(unittest.TestCase):
         self.assertEqual(errors.nickname_err, "")
 
     def test_fill_with_wrong_city(self):
-        errors = self.data_page.fill_form("Имя", "Фамилия", "Никнейм", "")
-        self.assertEqual(errors.city_err, "Укажите город")
+        self.data_page.open(self.data_page.BASE_URL)
+        errors = self.data_page.fill_form("Имя", "Фамилия", "Никнейм", "123")
+        self.assertEqual(errors.city_err, "Проверьте название города")
         self.assertEqual(errors.name_err, "")
         self.assertEqual(errors.last_name_err, "")
         self.assertEqual(errors.nickname_err, "")
+
+    def test_fill_with_empty_nickanme(self):
+        self.data_page.open(self.data_page.BASE_URL)
+        errors = self.data_page.fill_form("Имя", "Фамилия", "", "Москва, Россия")
+        self.assertEqual(errors.city_err, "")
+        self.assertEqual(errors.name_err, "")
+        self.assertEqual(errors.last_name_err, "")
+        self.assertEqual(errors.nickname_err, "Укажите никнейм")
+
+    def check_no_errors(self, errors: InputAnnotationsErrors):
+        if errors.name_err == "" and errors.city_err == "" and errors.last_name_err == "" and errors.nickname_err == "":
+            return True
+        return False
+
+    def test_all_ok_data(self):
+        self.data_page.open(self.data_page.BASE_URL)
+        errors = self.data_page.fill_form("Имя2", "Фамилия2", "Никнейм2", "Москва, Россия")
+        self.check_no_errors(errors)
+        self.data_page.reload()
+        newName, newSurname = self.main_page.get_name_surname_from_left_bar()
+        self.assertEqual(newName, "Имя2")
+        self.assertEqual(newSurname, "Фамилия2")
