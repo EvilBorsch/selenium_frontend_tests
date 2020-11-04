@@ -33,7 +33,7 @@ class PasswordPopup(Page):
         password_steps.clean_new_password()
         password_steps.set_new_password_value(password)
 
-        password_steps.toggle_new_password_visibility()
+        time.sleep(0.5)
         text = self.get_new_password_security()
 
         password_steps.clean_new_password()

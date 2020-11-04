@@ -41,7 +41,7 @@ class ContactsTest(unittest.TestCase):
         self.page.open_add_email_popup()
         self.page.add_backup_email('test_login_a.elagin1@mail.ru')
 
-        self.go_to_main()
+        self.page.open()
         self.page.delete_email()
 
         self.assertTrue(self.page.has_not_backup_email())
