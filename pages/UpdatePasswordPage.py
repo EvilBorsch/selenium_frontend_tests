@@ -19,7 +19,7 @@ class UpdatePasswordPage(Page):
         self.update_password_steps.save()
 
     @property
-    def get_password_form_errors(self):
+    def get_password_form_errors(self) -> dict:
         return {'invalidPassword': self.update_password_steps.invalid_password_error,
                 'invalidRePassword': self.update_password_steps.invalid_re_password_error,
                 'invalidSecretQuestion': self.update_password_steps.invalid_secret_question_error,

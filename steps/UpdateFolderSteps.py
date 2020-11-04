@@ -45,7 +45,7 @@ class UpdateFolderSteps(BaseSteps):
         """
         self.wait_until_and_get_elem_by_xpath(self.checkbox_password_path).click()
         checkbox_classes: str = self. \
-            wait_until_and_get_elem_by_xpath(self.checkbox_password_path) \
+            wait_until_and_get_elem_by_xpath(self.checkbox_password_path+'/div') \
             .get_attribute('class')
 
         return len(checkbox_classes.split()) == 2 or False
