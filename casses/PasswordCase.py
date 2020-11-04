@@ -1,8 +1,4 @@
-import os
-import unittest
-from selenium.webdriver import DesiredCapabilities, Remote
-from pages.SecurityPage import SecurityPage
-from cases.BaseCase import Test
+from .BaseCase import Test
 from pages.PasswordPopup import PasswordPopup
 
 

@@ -1,4 +1,3 @@
-from steps.authSteps import *
 from pages.BasePage import Page
 from steps.SecuritySteps import SecuritySteps
 
@@ -14,7 +13,6 @@ class SecurityPage(Page):
             return True
         return False
 
-        
     def click_services_link(self):
         security_steps = SecuritySteps(self.driver)
         text = security_steps.click_services_link()
@@ -57,8 +55,7 @@ class SecurityPage(Page):
             return True
         print(text)
         return False
-    
-        
+
     def click_setPassword_link(self):
         security_steps = SecuritySteps(self.driver)
         popup = security_steps.click_setpassword_link()
@@ -75,7 +72,6 @@ class SecurityPage(Page):
             return True
         return False
 
-        
     def click_oauth_link(self):
         security_steps = SecuritySteps(self.driver)
         text = security_steps.click_oauth_link()

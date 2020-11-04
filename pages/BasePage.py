@@ -14,4 +14,3 @@ class Page(object):
         url = urllib.parse.urljoin(url, self.PATH)
         self.driver.get(url)
         self.driver.maximize_window()
-

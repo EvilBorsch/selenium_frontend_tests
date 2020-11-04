@@ -1,22 +1,8 @@
-import os
-import unittest
-from selenium.webdriver import DesiredCapabilities, Remote
+from casses.BaseCase import Test
 from pages.SecurityPage import SecurityPage
-from cases.BaseCase import Test
 
 
 class SecurityTest(Test):
-
-    def runTest(self):
-        self.test_click_history_link()
-        self.test_click_oauth_link()
-        self.test_click_devices_link()
-        self.test_click_services_link()
-        self.test_click_setPassword_link()
-        self.test_click_keys_link()
-        self.test_click_password_more_link()
-        self.test_click_keys_more_link()
-        self.test_click_twofact_more_link()
 
     def setUp(self):
         super().setUp()
@@ -51,10 +37,7 @@ class SecurityTest(Test):
     def test_click_twofact_more_link(self):
         isOkey = self.page.click_twofact_more_link()
         self.assertTrue(isOkey)
-    
+
     def test_click_keys_more_link(self):
         isOkey = self.page.click_keys_more_link()
         self.assertTrue(isOkey)
-
-        
-    

@@ -1,13 +1,9 @@
-import os
-import unittest
-from selenium.webdriver import DesiredCapabilities, Remote
-from pages.SecurityPage import SecurityPage
-from cases.BaseCase import Test
 from pages.ContactsPage import ContactsPage
-import time
+from .BaseCase import Test
+
 
 class ContactsTest(Test):
-    
+
     def setUp(self):
         super().setUp()
 
@@ -26,7 +22,7 @@ class ContactsTest(Test):
     def test_delete_email(self):
         self.page.open_add_email_popup()
         self.page.add_backup_email('test_login_a.elagin1@mail.ru')
-        
+
         self.go_to_main()
         self.page.delete_email()
 
@@ -43,10 +39,8 @@ class ContactsTest(Test):
         self.page.open_add_phone_popup()
         self.page.close_phone_popup()
         self.assertTrue(self.page.is_add_phone_popup_close())
-        
-    
+
     def test_cancel_phone_popup(self):
         self.page.open_add_phone_popup()
         self.page.cancle_phone_popup()
         self.assertTrue(self.page.is_add_phone_popup_close())
-        
