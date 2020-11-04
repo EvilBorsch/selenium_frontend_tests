@@ -1,5 +1,3 @@
-import time
-
 from steps.PersonalDataSteps import PersonalDataSteps, InputAnnotationsErrors
 from .BasePage import *
 

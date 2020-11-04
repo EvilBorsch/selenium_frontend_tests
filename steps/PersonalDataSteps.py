@@ -30,6 +30,7 @@ class PersonalDataSteps(BaseSteps):
     photo_ready = '//*[@id="root"]/div/div[3]/div/div/div/form/div/div[1]/div/div/div[1]/div[2]'
 
     def upload_avatar(self, path: str):
+        # time sleeps only for correct pyautogui work
         time.sleep(2)
         splited = path.split('/')
         last_el = len(splited) - 1
@@ -42,12 +43,11 @@ class PersonalDataSteps(BaseSteps):
         pyautogui.write(directory_path[1:] + '/', interval=0.15)
         pyautogui.press('return')
         time.sleep(2)
-
         pyautogui.write(file_name, interval=0.15)
         pyautogui.press('return')
 
     def click_submit_avatar_btn(self):
-        self.wait_until_and_get_elem_by_xpath(self.submit_change_avatar_paht).click()
+        self.wait_to_be_clickable_by_xpath(self.submit_change_avatar_paht).click()
 
     def click_on_change_button(self):
         self.wait_until_and_get_elem_by_xpath(self.change_btn_path).click()
@@ -85,12 +85,10 @@ class PersonalDataSteps(BaseSteps):
     def check_if_uploaded(self):
         try:
             self.wait_until_and_get_elem_by_xpath(self.upload_process)
-            print("ok")
         except TimeoutError:
             return False
         try:
             self.wait_until_and_get_elem_by_xpath(self.photo_ready)
-            print("ok")
             return True
         except TimeoutError:
             return False

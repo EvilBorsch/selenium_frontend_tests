@@ -62,3 +62,6 @@ class Main_page(Page):
         self.open("https://id.mail.ru/contacts")
         self.personal_info_steps.click_delete_reserve_email_btn()
         self.personal_info_steps.click_confirm_button()
+
+    def open_popup(self):
+        self.open("https://id.mail.ru/contacts?open-add-extra-email=1")
