@@ -19,8 +19,7 @@ class UpdateFolderPage(Page):
         return header_text == "" or False
 
     def save_changes(self) -> bool:
-        header_text = self.update_steps.click_save_button()
-        return header_text == "" or False
+        return self.update_steps.click_save_button()
 
     def fill_name(self, value: str) -> bool:
         text_in_name_input = self.update_steps.set_input_name(value)
@@ -28,7 +27,7 @@ class UpdateFolderPage(Page):
 
     def fill_nested_folder(self, value: str) -> bool:
         value_from_drop_list = self.update_steps.set_value_of_drop_list(value)
-        return value_from_drop_list == value or False
+        return value_from_drop_list
 
     def fill_checkbox(self, checkbox_list: dict) -> bool:
         func_map: dict = {

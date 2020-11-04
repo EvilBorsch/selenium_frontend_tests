@@ -45,7 +45,7 @@ class UpdateFolderSteps(BaseSteps):
         """
         self.wait_until_and_get_elem_by_xpath(self.checkbox_password_path).click()
         checkbox_classes: str = self. \
-            wait_until_and_get_elem_by_xpath(self.checkbox_password_path+'/div') \
+            wait_until_and_get_elem_by_xpath(self.checkbox_password_path + '/div') \
             .get_attribute('class')
 
         return len(checkbox_classes.split()) == 2 or False
@@ -74,19 +74,12 @@ class UpdateFolderSteps(BaseSteps):
         # self.driver.execute_script(f"arguments[0].setAttribute('value','{value}')", selected_item)
         return selected_item.get_attribute("value")
 
-    def click_save_button(self) -> str:
+    def click_save_button(self) -> bool:
         """
-                :return: Текст в хедере модального окна
+                :return: Если закрылось окно то True
         """
         self.wait_until_and_get_elem_by_xpath(self.save_button_path).click()
-        header_text: str = ""
-        try:
-            header_text = self.wait_until_and_get_elem_by_xpath(self.modal_header_path).text
-            return header_text
-        except TimeoutException:
-            header_text = ""
-        finally:
-            return header_text
+        return len(self.driver.find_elements_by_xpath(self.modal_header_path)) == 0
 
     def click_cross_button(self) -> str:
         """
@@ -110,11 +103,8 @@ class UpdateFolderSteps(BaseSteps):
             return False
 
     def select_folder_top(self):
-        try:
-            self.wait_until_and_get_elem_by_xpath(self.FOLDER_TOP_SELECT).click()
-            return True
-        except TimeoutException:
-            return False
+        self.wait_until_and_get_elem_by_xpath(self.FOLDER_TOP_SELECT).click()
+        return True
 
     def select_incoming(self):
         try:
