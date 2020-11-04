@@ -1,10 +1,15 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python2
+
 import sys
 import unittest
+from tests.tests import LoginTest
+from tests.tests import FoldersTest
 
-from casses import IdMainPageAndPersonalDataTests
 
 if __name__ == '__main__':
-    suite = unittest.defaultTestLoader.loadTestsFromTestCase(IdMainPageAndPersonalDataTests)
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(LoginTest))
+    suite.addTest(unittest.makeSuite(FoldersTest))
+
     result = unittest.TextTestRunner().run(suite)
     sys.exit(not result.wasSuccessful())
