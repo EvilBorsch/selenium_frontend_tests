@@ -40,7 +40,7 @@ class FoldersTestSecond(unittest.TestCase):
         self.driver.quit()
 
     def go_to_main_folders(self):
-        self.main_page_folders.open(self.main_page_folders.BASE_URL)
+        self.main_page_folders.open(self.main_page_folders.BASE_URL + self.main_page_folders.PATH)
 
     def test_toogle_checkbox(self):
         value_checkbox = self.main_page_folders.click_change_checkbox_pop3()
