@@ -2,7 +2,7 @@ import urllib.parse
 
 
 class Page(object):
-    BASE_URL = 'https://id.mail.ru/'
+    BASE_URL = 'https://e.mail.ru/settings/folders'
     PATH = ''
 
     def __init__(self, driver):
