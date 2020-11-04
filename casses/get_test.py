@@ -3,7 +3,6 @@ import os
 import unittest
 
 from selenium.webdriver import DesiredCapabilities, Remote
-
 from pages.AuthPage import AuthPage
 from pages.MainPageFolders import MainPageFolders
 from pages.UpdateFodlerPage import UpdateFolderPage
