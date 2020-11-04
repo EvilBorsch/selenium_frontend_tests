@@ -28,6 +28,9 @@ class IdMainPageAndPersonalDataTests(unittest.TestCase):
         self.data_page = Data_page(self.driver)
         self.main_page = Main_page(self.driver)
 
+    def tearDown(self) -> None:
+        self.driver.quit()
+
     def go_to_main(self):
         self.main_page.open(self.main_page.BASE_URL)
 
@@ -39,9 +42,6 @@ class IdMainPageAndPersonalDataTests(unittest.TestCase):
             self.main_page.clear_reserve_email()
         except Exception:
             pass
-
-    def tearDown(self) -> None:
-        self.driver.quit()
 
     def test_go_to_all_settings(self):
         self.go_to_main()

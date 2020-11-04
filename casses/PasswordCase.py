@@ -1,28 +1,42 @@
 import os
 import unittest
+
 from selenium.webdriver import DesiredCapabilities, Remote
-from pages.SecurityPage import SecurityPage
-from cases.BaseCase import Test
+
+from pages.AuthPage import AuthPage
 from pages.PasswordPopup import PasswordPopup
 
 
-class PasswordTest(Test):
+class PasswordTest(unittest.TestCase):
 
-    def setUp(self):
-        super().setUp()
+    def setUp(self) -> None:
+        browser = os.environ.get('BROWSER', 'CHROME')
+        self.driver = Remote(
+            command_executor='http://127.0.0.1:4444/wd/hub',
+            desired_capabilities=getattr(DesiredCapabilities, browser).copy()
+        )
 
+        LOGIN = os.environ['LOGIN']
+        PASSWORD = os.environ['PASSWORD']
+        self.password = PASSWORD
+        self.login = LOGIN
+
+        auth_page = AuthPage(self.driver)
+        auth_page.auth(LOGIN, PASSWORD)
         password_page = PasswordPopup(self.driver)
         password_page.open()
         self.page = PasswordPopup(self.driver)
-        
+
+    def tearDown(self) -> None:
+        self.driver.quit()
+
     def test_send_empty_form(self):
         self.page.send_empty_form()
         self.assertTrue(
-            self.page.is_new_password_error() 
-            and self.page.is_current_password_error() 
+            self.page.is_new_password_error()
+            and self.page.is_current_password_error()
             and self.page.is_repeat_password_error()
-            )
-
+        )
 
     def test_change_password(self):
         NEW_PASSWORD = '12893490278kek'
@@ -47,7 +61,6 @@ class PasswordTest(Test):
 
         self.assertEqual(self.page.get_repeat_password_value(), self.page.get_new_password_value())
 
-
     def test_long_new_password(self):
         text = self.page.set_new_password_and_get_password_security_value("12345678aB12345678aB12345678aB12345678aB1")
         self.assertEqual(text, 'Пароль слишком длинный')
@@ -61,12 +74,10 @@ class PasswordTest(Test):
         self.assertEqual(text, 'Ненадёжный пароль')
 
     def test_close_popup(self):
-
         self.page.close_popup()
         self.assertFalse(self.page.is_popup_open())
 
     def test_cancel_popup(self):
-
         self.page.cancel()
         self.assertFalse(self.page.is_popup_open())
 
@@ -82,4 +93,3 @@ class PasswordTest(Test):
         self.page.change_old_password_visibility()
 
         self.assertTrue(not (self.page.is_new_password_visible() or self.page.is_old_password_visibile()) and isOkey)
-
