@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from casses.get_test import IdMainPageAndPersonalDataTests
+from casses.IdTestsFirst import IdMainPageAndPersonalDataTests

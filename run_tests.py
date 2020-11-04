@@ -3,8 +3,14 @@ import sys
 import unittest
 
 from casses import IdMainPageAndPersonalDataTests
+from casses.FoldersTestFirst import FoldersTest
 
 if __name__ == '__main__':
-    suite = unittest.defaultTestLoader.loadTestsFromTestCase(IdMainPageAndPersonalDataTests)
-    result = unittest.TextTestRunner().run(suite)
+    suites = unittest.TestSuite(
+        (
+            unittest.makeSuite(FoldersTest),
+            unittest.makeSuite(IdMainPageAndPersonalDataTests),
+        )
+    )
+    result = unittest.TextTestRunner().run(suites)
     sys.exit(not result.wasSuccessful())
