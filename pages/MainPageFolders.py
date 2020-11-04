@@ -1,15 +1,15 @@
-from steps.MainPageSteps import *
+from steps.MainPageFoldersSteps import *
 from .BasePage import *
-from steps.MainPageSteps import MainPageSteps
+from steps.MainPageFoldersSteps import MainPageFoldersSteps
 
 
-class Main_page(Page):
+class MainPageFolders(Page):
     BASE_URL = 'https://e.mail.ru/settings/folders'
     PATH = ''
 
     @property
     def pop3_steps(self):
-        return MainPageSteps(self.driver)
+        return MainPageFoldersSteps(self.driver)
 
     def click_change_checkbox_pop3(self) -> bool:
         """

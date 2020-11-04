@@ -1,4 +1,5 @@
 import time
+from selenium.common.exceptions import TimeoutException
 
 from .BaseSteps import *
 
@@ -11,7 +12,7 @@ class UpdatePasswordSteps(BaseSteps):
     CURRENT_PASSWORD_INPUT = '//input[@data-test-id="userPassword"]'
     SAVE_BUTTON = '//button[@data-test-id="submit"]'
     BACK_BUTTON = '//button[@data-test-id="cancel"]'
-    CLOSE_CREATE_FOLDER_BUTTON = '//div[@data-test-id="cross"]'
+    CLOSE_UPDATE_FOLDER_BUTTON = '//div[@data-test-id="cross"]'
 
     INVALID_PASSWORD_ERROR = '//small[@data-test-id="password-error-text"]'
     INVALID_RE_PASSWORD_ERROR = '//small[@data-test-id="passwordRepeat-error-text"]'
@@ -35,13 +36,25 @@ class UpdatePasswordSteps(BaseSteps):
         self.wait_until_and_get_elem_by_xpath(self.CURRENT_PASSWORD_INPUT).send_keys(current_password)
 
     def save(self):
-        self.wait_until_and_get_elem_by_xpath(self.SAVE_BUTTON).click()
+        try:
+            self.wait_until_and_get_elem_by_xpath(self.SAVE_BUTTON).click()
+            return True
+        except TimeoutException:
+            return False
 
     def back(self):
-        self.wait_until_and_get_elem_by_xpath(self.BACK_BUTTON).click()
+        try:
+            self.wait_until_and_get_elem_by_xpath(self.BACK_BUTTON).click()
+            return True
+        except TimeoutException:
+            return False
 
-    def close(self):
-        self.wait_until_and_get_elem_by_xpath(self.CLOSE_CREATE_FOLDER_BUTTON).click()
+    def close(self) -> bool:
+        try:
+            self.wait_until_and_get_elem_by_xpath(self.CLOSE_UPDATE_FOLDER_BUTTON).click()
+            return True
+        except TimeoutException:
+            return False
 
     @property
     def invalid_password_error(self) -> bool:

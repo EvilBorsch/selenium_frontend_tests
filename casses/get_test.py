@@ -5,7 +5,7 @@ import unittest
 from selenium.webdriver import DesiredCapabilities, Remote
 
 from pages.AuthPage import AuthPage
-from pages.MainPage import Main_page
+from pages.MainPageFolders import MainPageFolders
 from pages.UpdateFodlerPage import UpdateFolderPage
 from pages.UpdatePasswordPage import UpdatePasswordPage
 
@@ -13,7 +13,7 @@ from enum import Enum
 import random
 
 
-class GetTest(unittest.TestCase):
+class FoldersUpdateTest(unittest.TestCase):
 
     def runTest(self):
         """
@@ -22,13 +22,18 @@ class GetTest(unittest.TestCase):
         """
         # Страница папок
         self.main_page.open()
-        # self.test_toogle_checkbox()
+
+        self.test_toogle_checkbox()
+        self.test_invalid_re_password()
+        # self.test_update_folder_name()
+        # self.test_select_top_folder()
+        self.test_update_nested_folder()
         self.test_short_password()
+        self.test_invalid_re_password()
+        self.test_missing_secret_question()
+        self.test_missing_secret_question_answer()
+        self.test_valid_update_folder_form()
 
-        # self.test_upload_avatar_by_btn()
-        # self.test_upload_avatar_by_avatar()
-
-        self.clear_email_after_tests()
         print("Done Pop Up tests")
 
     def setUp(self) -> None:
@@ -43,9 +48,9 @@ class GetTest(unittest.TestCase):
 
         auth_page = AuthPage(self.driver)
         auth_page.auth(LOGIN, PASSWORD)
-        id_page = Main_page(self.driver)
+        id_page = MainPageFolders(self.driver)
         id_page.open(id_page.BASE_URL)
-        self.main_page = Main_page(self.driver)
+        self.main_page = MainPageFolders(self.driver)
         self.update_folder = UpdateFolderPage(self.driver)
         self.update_password = UpdatePasswordPage(self.driver)
         self.__password_context = {
@@ -58,9 +63,6 @@ class GetTest(unittest.TestCase):
 
     def go_to_main(self):
         self.main_page.open(self.main_page.BASE_URL)
-
-    def clear_email_after_tests(self):
-        pass
 
     def tearDown(self) -> None:
         self.driver.quit()
@@ -81,12 +83,16 @@ class GetTest(unittest.TestCase):
 
     def test_select_top_folder(self):
         self.go_to_main()
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
         self.assertTrue(self.update_folder.fill_nested_folder('high_level'))
         ok = self.update_folder.save_changes()
         self.assertTrue(ok)
 
     def test_update_nested_folder(self):
         self.go_to_main()
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
 
         class EnumForDropList(Enum):
             a = "incoming"
@@ -108,3 +114,84 @@ class GetTest(unittest.TestCase):
         context['re_password'] = 'ps'
         self.update_password.set_password(context)
         self.assertTrue(self.update_password.get_password_form_errors['invalidPassword'])
+
+    def test_invalid_re_password(self):
+        self.go_to_main()
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
+        self.update_folder.fill_checkbox({"password": True})
+        self.update_folder.save_changes()
+        context = self.__password_context.copy()
+        context['re_password'] = context['password'] + 'text'
+        self.update_password.set_password(context)
+        self.assertTrue(self.update_password.get_password_form_errors['invalidRePassword'])
+
+    def test_missing_secret_question(self):
+        self.go_to_main()
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
+        self.update_folder.fill_checkbox({"password": True})
+        self.update_folder.save_changes()
+        context = self.__password_context.copy()
+        context['question'] = ''
+        self.update_password.set_password(context)
+        self.assertTrue(self.update_password.get_password_form_errors['invalidSecretQuestion'])
+
+    def test_missing_secret_question_answer(self):
+        self.go_to_main()
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
+        self.update_folder.fill_checkbox({"password": True})
+        self.update_folder.save_changes()
+        context = self.__password_context.copy()
+        context['question_answer'] = ''
+        self.update_password.set_password(context)
+        self.assertTrue(self.update_password.get_password_form_errors['invalidSecretQuestionAnswer'])
+
+    def test_invalid_current_password(self):
+        self.go_to_main()
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
+        self.update_folder.fill_checkbox({"password": True})
+        self.update_folder.save_changes()
+        context = self.__password_context.copy()
+        context['current_password'] = ''
+        self.update_password.set_password(context)
+        self.assertTrue(self.update_password.get_password_form_errors['invalidUserPassword'])
+
+    def test_close_update_folder_form(self):
+        self.go_to_main()
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
+        self.update_folder.fill_checkbox({"password": True})
+        self.update_folder.save_changes()
+        context = self.__password_context.copy()
+        context['current_password'] = ''
+        self.update_password.set_password(context)
+        self.assertTrue(self.update_password.close())
+
+    def test_cancel_update_folder_form(self):
+        self.go_to_main()
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
+        self.update_folder.fill_checkbox({"password": True})
+        self.update_folder.save_changes()
+        context = self.__password_context.copy()
+        context['current_password'] = ''
+        self.update_password.set_password(context)
+        self.assertTrue(self.update_password.back())
+        self.assertTrue(self.update_password.back())
+
+    def test_valid_update_folder_form(self):
+        self.go_to_main()
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
+        self.update_folder.fill_checkbox({"password": True})
+        self.update_folder.save_changes()
+        context = self.__password_context.copy()
+        self.update_password.set_password(context)
+        ok = self.main_page.click_pencil_icon()
+        self.assertTrue(ok)
+        self.update_folder.fill_checkbox({"password": False})
+        self.update_password.update_password_steps.set_current_password(context['current_password'])
+        self.update_password.update_password_steps.save()

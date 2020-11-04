@@ -18,6 +18,12 @@ class UpdatePasswordPage(Page):
         self.update_password_steps.set_current_password(password_context['current_password'])
         self.update_password_steps.save()
 
+    def close(self) -> bool:
+        return self.update_password_steps.close()
+
+    def back(self) -> bool:
+        return self.update_password_steps.back()
+
     @property
     def get_password_form_errors(self) -> dict:
         return {'invalidPassword': self.update_password_steps.invalid_password_error,

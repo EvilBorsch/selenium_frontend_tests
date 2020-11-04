@@ -3,7 +3,7 @@ from selenium.common.exceptions import TimeoutException
 from .BaseSteps import *
 
 
-class MainPageSteps(BaseSteps):
+class MainPageFoldersSteps(BaseSteps):
     pop3_checkbox_path = '(//label[@data-test-id="folder-pop3"])[1]'
     pop3_checkbox_div_path = '((//label[@data-test-id="folder-pop3"])[1])/div'
     update_folder_path = '((((//button[@data-test-id="folder-delete"]))/..)/..)//button[@data-test-id="folder-edit"]'

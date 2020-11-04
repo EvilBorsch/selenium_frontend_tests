@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import sys
 import unittest
-from casses import GetTest
+from casses import FoldersUpdateTest
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
-    suite.addTest(GetTest())
+    suite.addTest(FoldersUpdateTest())
     result = unittest.TextTestRunner().run(suite)
     sys.exit(not result.wasSuccessful())
