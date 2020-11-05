@@ -13,6 +13,6 @@ class LoginPage(BasePage):
         return LoginForm(self.driver)
 
     def wait_for_login(self):
-        WebDriverWait(self.driver, 5).until(
+        WebDriverWait(self.driver, 15).until(
             expected_conditions.url_to_be('https://e.mail.ru/inbox/?afterReload=1')
         )

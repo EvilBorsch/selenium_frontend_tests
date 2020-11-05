@@ -1,5 +1,6 @@
 from steps.base import BaseStep
 from pages.folders import FoldersPage
+from time import sleep
 
 
 class FoldersSteps(BaseStep):
@@ -17,6 +18,9 @@ class FoldersSteps(BaseStep):
         self.folders_page.add_folder.add()
         if password_context:
             self.set_password(password_context)
+
+    def wait_folder(self, name):
+        self.folders_page.add_folder.folder.wait_folder(name)
 
     def select_folder_option(self, option):
         if option:
@@ -46,10 +50,16 @@ class FoldersSteps(BaseStep):
         self.folders_page.add_folder.password.set_current_password(password_context['current_password'])
         self.folders_page.add_folder.password.save()
 
-    def delete_folder(self):
+    def delete_folder(self, name, password=""):
         self.folders_page.open()
-        self.folders_page.add_folder.folder.delete()
+        self.folders_page.add_folder.folder.delete_folder(name)
+        if self.folders_page.add_folder.folder.input:
+            self.folders_page.add_folder.folder.input_password(password)
+            self.folders_page.add_folder.folder.apply()
+            self.folders_page.add_folder.folder.wait_form()
+
         self.folders_page.add_folder.folder.apply()
+        sleep(10)
 
     def get_form_errors(self):
         return {'emptyFolderName': self.folders_page.add_folder.empty_folder_name_error,
